@@ -1,15 +1,79 @@
 #include <stdio.h>
-int main(int argc, char const *argv[])
+#define _USE_MATH_DEFINES
+#include <math.h>
+typedef struct ComplexNum
 {
-    int x;
-  int args;
+    double Re;
+    double Im;
+    double Mod;
+    double Arg;
+}ComplexNum;
 
-  printf("Enter an integer: ");
-  if (( args = scanf("%d", &x)) == 0) {
-      printf("Error: not an integer\n");
-  } else {
-      printf("Read in %d\n", x);
-  }
+ComplexNum* completeComplex(ComplexNum* arg)
+{
+    //Assume Numbers are always completed when entered or calculated on
+    struct ComplexNum* temp = NULL;
+    temp = (ComplexNum*)malloc(sizeof(ComplexNum));
+    if ((arg->Mod == 0) && (arg->Re != 0))
+    {
+        temp->Re = arg->Re;
+        temp->Im = arg->Im;
+        temp->Mod = sqrt((arg->Re * arg->Re) + (arg->Im * arg->Im));
+        temp->Arg = atan2(arg->Re,arg->Im); //atan2 Is WONDERFUL, returns radian pos, in Principal Argument.
+    }
+    else if((arg->Re == 0) && (arg->Mod != 0))
+    {
+        temp->Re = arg->Mod * cos(arg->Arg);
+        temp->Im = arg->Mod * sin(arg->Arg);
+        temp->Mod = arg->Mod;
+        temp->Arg = arg->Arg;
+    }
+    else
+    {
+        temp->Re = 0;
+        temp->Im = 0;
+        temp->Mod = 0;
+        temp->Arg = 0;
+    }
+    return temp;
+}
 
-  scanf("%d", &x);
+ComplexNum* addC(ComplexNum* arg1, ComplexNum* arg2)
+{
+    struct ComplexNum* temp = NULL;
+    temp = (ComplexNum*)malloc(sizeof(ComplexNum));
+    temp->Re = arg1->Re + arg2->Re;
+    temp->Im = arg1->Im + arg2->Im;
+    return completeComplex(temp);
+}
+
+ComplexNum* multC(ComplexNum* arg1, ComplexNum* arg2)
+{
+    struct ComplexNum* temp = NULL;
+    temp = (ComplexNum*)malloc(sizeof(ComplexNum));
+    temp->Mod = arg1->Mod * arg2->Mod;
+    temp->Arg = arg1->Arg + arg2->Arg;
+    return completeComplex(temp);
+}
+
+ComplexNum* subC(ComplexNum* arg1, ComplexNum* arg2)
+{
+    struct ComplexNum* temp = NULL;
+    temp = (ComplexNum*)malloc(sizeof(ComplexNum));
+    temp->Re = arg1->Re - arg2->Re;
+    temp->Im = arg1->Im - arg2->Im;
+    return completeComplex(temp);
+}
+
+ComplexNum* divC(ComplexNum* arg1, ComplexNum* arg2)
+{
+    if (arg2->Mod == 0)
+    {
+        return -1;
+    }
+    struct ComplexNum* temp = NULL;
+    temp = (ComplexNum*)malloc(sizeof(ComplexNum));
+    temp->Mod = arg1->Mod / arg2->Mod;
+    temp->Arg = arg1->Arg - arg2->Arg;
+    return completeComplex(temp);
 }
