@@ -1,14 +1,9 @@
 #include <stdio.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
-typedef struct ComplexNum
-{
-    double Re;
-    double Im;
-    double Mod;
-    double Arg;
-}ComplexNum;
+#include "Complex-Number.h"
 
+//Create & Complete
 ComplexNum* completeComplex(ComplexNum* arg)
 {
     //Assume Numbers are always completed when entered or calculated on
@@ -37,7 +32,8 @@ ComplexNum* completeComplex(ComplexNum* arg)
     }
     return temp;
 }
-
+//
+//Standard Arithmetic Functions
 ComplexNum* addC(ComplexNum* arg1, ComplexNum* arg2)
 {
     struct ComplexNum* temp = NULL;
@@ -76,4 +72,43 @@ ComplexNum* divC(ComplexNum* arg1, ComplexNum* arg2)
     temp->Mod = arg1->Mod / arg2->Mod;
     temp->Arg = arg1->Arg - arg2->Arg;
     return completeComplex(temp);
+}
+
+ComplexNum* recipC(ComplexNum* arg)
+{
+    if(arg->Mod == 0){return 0;}
+    struct ComplexNum* temp = NULL;
+    temp = (ComplexNum*)malloc(sizeof(ComplexNum));
+    temp->Re = (arg->Re / arg->Mod);
+    temp->Im = (-arg->Im / arg->Mod);
+    return completeComplex(temp);
+}
+
+ComplexNum* complexConjugate(ComplexNum* arg)
+
+
+{
+    struct ComplexNum* temp = NULL;
+    temp = (ComplexNum*)malloc(sizeof(ComplexNum));
+    temp->Re = arg->Re;
+    temp->Im = -arg->Im;
+    return completeComplex(temp);
+}
+
+ComplexNum* Power(ComplexNum* base, double index)
+
+{
+    struct ComplexNum* temp;
+    temp = (ComplexNum*)malloc(sizeof(ComplexNum));
+    temp->Mod = pow(base->Mod, index);
+    temp->Arg = base->Arg * index;
+    return completeComplex(temp);
+}
+//
+//Boolean Expressions (The Complex Plane is an unordered field, meaning one number being greater/less than another has no meaning.)
+int equalC(ComplexNum* arg1, ComplexNum* arg2)
+
+{
+    if ((arg1->Re == arg2->Re)&&(arg1->Im == arg2->Im)) {return 1;}
+    return 0;
 }
